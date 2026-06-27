@@ -4,7 +4,7 @@ import time
 import wave
 import os
 
-voice = PiperVoice.load("/home/revan/Documents/Robotics/Jarvis/voices/joe/en_US-joe-medium.onnx")
+voice = PiperVoice.load("/home/revan/Documents/Robotics/Jarvis/voices/alba/en_GB-alba-medium.onnx")
 def speak(text):
     with wave.open("output.wav", "wb") as wav_file:
         voice.synthesize_wav(text, wav_file)

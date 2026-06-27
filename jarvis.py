@@ -3,10 +3,11 @@ import threading
 import webbrowser
 import re
 import os
-from newspeech import speak
+from speech import speak
 import subprocess
 from urllib.parse import quote
 import time
+import vad
 
 def handle_youtube(query):
     if "youtube" in query:
@@ -128,8 +129,8 @@ def handle_files(query):
             speak(random.choice(yesspeech))
             return True
         else:
-            failspeech = ["File not found, sir",
-                          "unable to locate the file, sir",
+            failspeech = ["File not found sir",
+                          "unable to locate the file sir",
                           "search concluded, no matching file or folder"]
             speak(random.choice(failspeech)) 
             return True
@@ -157,8 +158,8 @@ def handle_show_tasks(query):
             with open(matches[0]) as f:
                 tasks = f.readlines()
             if not tasks:
-                notasks = ["Your tasks list is empty, sir",
-                           "You have no tasks to take care of, sir"]
+                notasks = ["Your tasks list is empty sir",
+                           "You have no tasks to take care of sir"]
                 speak(random.choice(notasks))
             else:
                 speak(f"You have {len(tasks)} tasks sir")
@@ -298,8 +299,9 @@ def handle_remove_tasks(query):
 
 
 while True:
-    query = input("How can I help you today sir?\n").lower()
-    
+    query = vad.listen().lower()
+    query = query.replace(".", "").replace("?","").replace(",", "").strip() 
+    print(repr(query))
     if (
         handle_youtube(query)
         or handle_locking(query)
